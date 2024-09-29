@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Подключение внешнего CSS-файла -->
+    <link rel="stylesheet" href="styles.css">
+
+
+
+
+<style>
+    /* Основные стили страницы */
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* Шрифт, похожий на iOS */
+background: #1d1f22; /* фон страницы */
+color: #ffffff; /* цвет текста */
+margin: 0;
+padding: 20px;
+display: flex;
+flex-direction: column;
+}
+
+/* Заголовок */
+h2 {
+text-align: center;
+color:  #C0C0C0; /* Глубокий Синий для элегантности */
+font-size: 36px; /* Увеличенный размер шрифта для выразительности */
+font-weight: 600; /* Средний жирный шрифт для современного вида */
+margin-bottom: 20px; /* Уменьшенный отступ */
+text-transform: uppercase; /* Преобразование текста в верхний регистр для стиля */
+letter-spacing: 1px; /* Расстояние между буквами для акцента */
+position: relative; /* Для абсолютного позиционирования псевдоэлемента */
+padding-bottom: 10px; /* Отступ снизу для добавления подчеркивания */
+}
+
+h2::after {
+content: "";
+position: absolute;
+left: 50%;
+bottom: 0;
+width: 60%;
+height: 4px; /* Толщина линии */
+background: linear-gradient(to right, #00BFAE, #FF6F61); /* Градиентная линия в стиле iOS */
+transform: translateX(-50%); /* Центрирование линии */
+}
+
+
+/* Определение переменных для цветов */
+:root {
+--border-color: #fcfcfc; /* Цвет границ таблицы и ячеек */
+--outer-border-color: #f9fafa; /* Цвет самой крайней границы таблицы */
+}
+
+/* Таблицы */
+table {
+width: 100%;
+border-collapse: collapse;
+}
+
+/* Основной стиль таблиц */
+.report-table {
+background: #fcfcfc; /* Белый фон таблиц */
+border: 2px solid var(--outer-border-color); /* Цвет самой крайней границы таблицы */
+border-radius: 12px; /* Более округлые углы */
+overflow: hidden;
+margin-bottom: 20px;
+}
+
+.report-table th,
+.report-table td {
+border: 1px solid var(--border-color); /* Цвет границы вокруг ячеек */
+}
+
+.report-table th {
+background-color:  #2a2e32; /* Светлый фон для заголовков */
+color: #fcf8f8; /* Тёмно-серый цвет текста */
+text-align: left;
+padding: 12px;
+font-weight: 500; /* Полужирный шрифт */
+border-bottom: 2px solid var(--border-color); /* Тонкая светло-синяя линия под заголовком */
+text-align: center;
+}
+
+.report-table td {
+padding: 12px;
+color: #00ff1eb7; /* Тёмно-серый цвет текста */
+font-weight: 700; /* Жирный шрифт для выделения цифр */
+text-align: right;
+border-bottom: 1px solid var(--border-color); /* Линии разделения строк */
+}
+
+.report-table td[colspan="2"],
+.report-table td[colspan="3"] {
+text-align: left; /* Для более естественного отображения крупных ячеек */
+border: 1px solid var(--border-color); /* Цвет границы для ячеек с colspan 2 и 3 */
+}
+
+.report-table tr:last-child td {
+border-bottom: none; /* Убрать последнюю границу */
+}
+
+/* Общие стили для ячеек с идентификаторами, начинающимися на "report-" или "cashFlow-" */
+.report-table td[id^="report-"], 
+.report-table td[id^="cashFlow-"] {
+display: flex;
+justify-content: space-between; /* Элементы распределяются по разным сторонам */
+align-items: center; /* Центрирование по вертикали */
+font-weight: 700; /* Жирный шрифт для выделения цифр */
+color: #00ff1eb7; /* Цвет для выделения цифр (зелёный оттенок) */
+padding: 5px;
+}
+
+
+
+
+/* Текст внутри ячейки выравнивается по левому краю */
+.report-table .text-left {
+text-align: left;
+color: #fffefe; /* Черный цвет для текста */
+font-weight: 400; /* Нормальный шрифт для текста */
+}
+
+/* Цифры внутри ячейки выравниваются по правому краю */
+.report-table .number-right {
+text-align: right;
+color: #00ff1eb7; /* Цвет цифр */
+font-weight: 700; /* Жирный шрифт для цифр */
+}
+
+
+.report-table tr:nth-child(odd) td {
+background: #1d1f22; /* Более светлый фон для чередующихся строк */
+}
+
+.report-table tr:nth-child(even) td {
+background: #1d1f22; /* Белый фон */
+}
+
+
+
+
+.other-table {
+        background: #fff; /* Белый фон для других таблиц */
+        border: 1px solid #ddd; /* Светло-серая граница */
+        border-radius: 8px; /* Округление углов */
+        margin-bottom: 20px; /* Отступ снизу */
+        width: 100%; /* Ширина таблицы */
+        border-collapse: collapse; /* Объединение границ */
+    }
+
+    .other-table th,
+    .other-table td {
+        border: 1px solid #ddd; /* Светло-серая граница вокруг ячеек */
+        padding: 10px; /* Внутренний отступ */
+        text-align: left; /* Выравнивание текста по левому краю */
+    }
+
+    .other-table th {
+        background-color: #f4f4f4; /* Светлый фон для заголовков */
+        color: #333; /* Темный цвет текста */
+        font-weight: bold; /* Жирный шрифт */
+    }
+
+    .other-table td {
+        background-color: #fafafa; /* Светлый фон для ячеек */
+        color: #666; /* Светло-серый цвет текста */
+    }
+
+    .other-table tr:nth-child(odd) {
+        background-color: #f9f9f9; /* Чередующийся фон строк */
+    }
+
+/* Стили для самой таблицы */
+table.other-table {
+    width: 100%; /* Занимает всю доступную ширину контейнера */
+    border-collapse: collapse; /* Убирает промежутки между границами ячеек */
+    background-color: #fff; /* Цвет фона таблицы */
+}
+
+table.other-table th, table.other-table td {
+    border: 1px solid #ddd; /* Цвет границы ячеек */
+    padding: 8px; /* Внутренние отступы в ячейках */
+    text-align: left; /* Выравнивание текста в ячейках */
+}
+
+table.other-table th {
+    background-color: #f4f4f4; /* Цвет фона заголовков столбцов */
+    font-weight: bold; /* Полужирный шрифт для заголовков */
+}
+
+table.other-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Чередующиеся цвета строк для лучшей читаемости */
+}
+
+table.other-table tr:hover {
+    background-color: #f1f1f1; /* Цвет фона строки при наведении курсора */
+}
+
+
+
+
+
+
+/* Основные стили для сайдбара */
+.sidebar {
+    height: 100vh; /* Высота сайдбара на всю высоту экрана */
+    width: 60px; /* Изначально свернутый сайдбар (узкая ширина) */
+    background-color: #333; /* Темный фон сайдбара */
+    padding-top: 20px; /* Отступ сверху для содержания сайдбара */
+    border-right: 1px solid #444; /* Граница справа сайдбара */
+    position: fixed; /* Фиксированное позиционирование сайдбара */
+    transition: width 0.3s, background-color 0.3s; /* Плавное изменение ширины и фона при изменении */
+    overflow: hidden; /* Прятать содержимое, выходящее за пределы сайдбара */
+    display: flex; /* Использование flexbox для размещения элементов */
+    flex-direction: column; /* Расположение элементов по вертикали */
+    align-items: center; /* Выравнивание элементов по центру по горизонтали */
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1); /* Тень для сайдбара */
+}
+
+/* Расширение сайдбара при активации */
+.sidebar.active {
+    width: 250px; /* Расширение ширины при активации */
+}
+
+/* Стили для кнопки переключения сайдбара */
+.sidebar-toggle {
+    font-size: 20px; /* Размер шрифта иконки переключателя */
+    background: none; /* Без фона у кнопки */
+    border: none; /* Без границы у кнопки */
+    cursor: pointer; /* Курсор в виде указателя при наведении */
+    position: absolute; /* Абсолютное позиционирование кнопки */
+    top: 20px; /* Отступ сверху от края сайдбара */
+    transition: color 0.3s, left 0.3s; /* Плавное изменение цвета и положения при наведении */
+    color: #fff; /* Цвет текста кнопки */
+}
+
+/* Свернутое состояние сайдбара */
+.sidebar.collapsed .sidebar-toggle {
+    left: 3%; /* Центрирование кнопки при свернутом сайдбаре */
+    transform: translateX(-50%); /* Для центрирования по горизонтали */
+}
+
+/* Развернутое состояние сайдбара */
+.sidebar:not(.collapsed) .sidebar-toggle {
+    left: 1px; /* Позиция кнопки слева при развернутом сайдбаре */
+}
+
+/* Цвет кнопки переключения при наведении */
+.sidebar-toggle:hover {
+    color: #e0e0e0; /* Светлый цвет текста при наведении */
+}
+
+/* Стили для контейнера вкладок в сайдбаре */
+.tabs {
+    display: flex; /* Использование flexbox для размещения вкладок */
+    flex-direction: column; /* Расположение вкладок по вертикали */
+    width: 100%; /* Ширина контейнера вкладок */
+    margin-top: 60px; /* Отступ сверху (учитываем высоту кнопки) */
+    align-items: center; /* Выравнивание вкладок по центру по горизонтали */
+}
+
+/* Основные стили для вкладок сайдбара */
+.tablink {
+    background-color: #333; /* Темный фон вкладки */
+    border: none; /* Без границы у вкладки */
+    cursor: pointer; /* Курсор в виде указателя при наведении */
+    padding: 14px; /* Внутренний отступ для вкладки */
+    text-align: center; /* Выравнивание текста по центру */
+    font-size: 16px; /* Размер шрифта текста во вкладке */
+    width: 100%; /* Ширина вкладки */
+    display: flex; /* Использование flexbox для размещения содержимого вкладки */
+    align-items: center; /* Выравнивание элементов по центру по вертикали */
+    justify-content: center; /* Выравнивание элементов по центру по горизонтали */
+    border-radius: 12px; /* Скругление углов вкладки */
+    margin-bottom: 10px; /* Отступ снизу от других вкладок */
+    position: relative; /* Относительное позиционирование вкладки */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* Тень для вкладки */
+    color: #c0c0c0; /* Светло-серый цвет текста */
+    height: 60px; /* Высота вкладки */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Плавное изменение фона и цвета текста при наведении */
+}
+
+/* Скрытие текста вкладок при свернутом сайдбаре */
+.sidebar:not(.active) .tabtext {
+    display: none; /* Скрыть текст вкладок */
+}
+
+/* Стили для иконок вкладок при свернутом сайдбаре */
+.sidebar:not(.active) i {
+    font-size: 25px; /* Размер иконок */
+    color: #c0c0c0; /* Цвет иконок */
+}
+
+/* Стили для вкладок при активном сайдбаре */
+.sidebar.active .tablink {
+    justify-content: flex-start; /* Выравнивание элементов по левому краю */
+    padding: 14px 20px; /* Увеличенный внутренний отступ */
+}
+
+/* Стили для текста вкладок при активном сайдбаре */
+.sidebar.active .tabtext {
+    display: block; /* Отображение текста вкладок */
+    margin-left: 15px; /* Отступ слева от иконок */
+    transition: opacity 0.3s, visibility 0.3s; /* Плавное изменение видимости и непрозрачности текста */
+}
+
+/* Стили для иконок вкладок при активном сайдбаре */
+.sidebar.active i {
+    margin-right: 10px; /* Отступ справа от иконок */
+}
+
+/* Стили для активных и hovered вкладок */
+.tablink:hover,
+.tablink.active {
+    background-color: #444; /* Темный фон при наведении и для активной вкладки */
+    color: #fff; /* Белый цвет текста при наведении и для активной вкладки */
+}
+
+/* Стили для иконок вкладок при наведении и активной вкладке */
+.tablink:hover i,
+.tablink.active i {
+    color: #e0e0e0; /* Светлый цвет иконок при наведении и для активной вкладки */
+}
+
+
+
+
+
+/* Стили для основного контента */
+.content {
+    margin-left: 60px; /* Отступ слева для контента, чтобы не перекрывался сайдбаром */
+    padding: 20px; /* Внутренний отступ для контента */
+    transition: margin-left 0.3s; /* Плавное изменение отступа слева при переключении сайдбара */
+}
+
+/* Увеличение отступа слева контента при активном сайдбаре */
+.sidebar.active + .content {
+    margin-left: 250px; /* Увеличение отступа слева при расширенном сайдбаре */
+}
+
+
+
+/* Основные стили для контейнера таблицы */
+.table-container {
+    margin-left: 60px; /* Отступ слева для контейнера таблицы */
+    padding: 20px; /* Внутренний отступ для контейнера таблицы */
+    transition: margin-left 0.3s; /* Плавное изменение отступа слева при переключении сайдбара */
+    box-sizing: border-box; /* Включить отступы и границы в общую ширину/высоту элемента */
+}
+
+/* Увеличение отступа слева для контейнера таблицы при активном сайдбаре */
+.sidebar.active + .table-container {
+    margin-left: 250px; /* Увеличение отступа слева при расширенном сайдбаре */
+}
+
+
+
+
+/* Стили для вкладок контента */
+.tabcontent {
+    display: none; /* Скрытие всех вкладок по умолчанию */
+}
+
+/* Стили для активной вкладки контента */
+.tabcontent.active {
+    display: block; /* Отображение только активной вкладки */
+}
+
+/* Стили для кнопок */
+button {
+    padding: 10px 20px; /* Внутренний отступ для кнопок */
+    border: none; /* Без границы у кнопок */
+    background-color: #e0e0e0; /* Светлый фон кнопок */
+    color: #333; /* Темный цвет текста на кнопках */
+    font-size: 16px; /* Размер шрифта текста на кнопках */
+    cursor: pointer; /* Курсор в виде указателя при наведении */
+    margin-bottom: 10px; /* Отступ снизу от других кнопок */
+    border-radius: 12px; /* Скругление углов кнопок */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Плавное изменение фона и тени при наведении */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень для кнопок */
+    display: flex; /* Использование flexbox для размещения содержимого кнопок */
+    align-items: center; /* Выравнивание элементов по центру по вертикали */
+    justify-content: center; /* Выравнивание элементов по центру по горизонтали */
+}
+
+/* Цвет кнопок при наведении */
+button:hover {
+    background-color: #d0d0d0; /* Более темный фон при наведении */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Более выраженная тень при наведении */
+}
+
+/* Стили для кнопок при нажатии */
+button:active {
+    transform: scale(0.98); /* Уменьшение кнопки при нажатии */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Уменьшение тени при нажатии */
+}
+
+/* Стили для иконок в кнопках */
+.icon {
+    font-size: 20px; /* Размер шрифта иконок */
+    margin-right: 8px; /* Отступ справа от иконок */
+    color: #007aff; /* Цвет иконок */
+}
+
+/* Цвет иконок при наведении на кнопки */
+button:hover .icon {
+    color: #005c99; /* Более тёмный цвет иконок при наведении */
+}
+
+/* Цвет иконок при нажатии на кнопки */
+button:active .icon {
+    color: #007aff; /* Цвет иконок при нажатии */
+}
+
+
+
+
+/* Контейнер для карточек */
+.container {
+display: flex; /* Flexbox для горизонтального расположения карточек */
+gap: 20px; /* Расстояние между карточками */
+width: 100%;
+flex-wrap: wrap; /* Разрешить перенос карточек на следующую строку при необходимости */
+padding: 20px; /* Отступы вокруг контейнера */
+box-sizing: border-box; /* Включить отступы в общую ширину/высоту элемента */
+
+}
+
+/* Основной стиль карточки */
+.card {
+background: rgba(255, 255, 255, 0.15); /* Полупрозрачный фон */
+backdrop-filter: blur(12px); /* Эффект размытия для стеклянного эффекта */
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Лёгкая тень для глубины */
+border: 1px solid #ffffff; /* Белая граница */
+display: flex; /* Flexbox для расположения элементов внутри карточки */
+align-items: center; /* Центрирование элементов по вертикали */
+justify-content: space-between; /* Распределение элементов по сторонам */
+padding: 20px; /* Отступы внутри карточки */
+border-radius: 12px; /* Более округлые углы */
+box-sizing: border-box; /* Включить отступы и границы в общую ширину/высоту элемента */
+color: #fefcfc; /* Цвет текста */
+transition: transform 0.3s ease, box-shadow 0.3s ease; /* Плавные переходы */
+width: calc(33.33% - 20px); /* Ширина карточки, учитывая отступы */
+margin-bottom: 20px; /* Отступ снизу для карточек */
+}
+
+
+/* Внутренний фон карточки */
+.card::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+border-radius: 12px;
+background: #2a2e32; /* Внутренний фон карточки */
+z-index: -1; /* Помещаем фон за содержимым */
+}
+
+/* Контент карточки */
+.card-content {
+z-index: 1; /* Содержимое над фоном */
+color: #333; /* Темный текст */
+font-size: 16px;
+font-weight: 500;
+}
+
+/* Иконка карточки (слева) */
+.card .icon {
+font-size: 40px; /* Размер иконки */
+color: #007aff; /* Синий цвет для иконки */
+flex-shrink: 0; /* Иконка не будет сжиматься */
+margin-right: 20px; /* Отступ справа */
+margin-left: 30px; /* Отступ слева */
+}
+
+/* Значение карточки (сумма, справа сверху) */
+.card .value {
+font-size: 32px; /* Размер шрифта для суммы */
+font-weight: 600; /* Полужирный шрифт */
+position: absolute;
+top: 10px; /* Верхний отступ */
+right: 20px; /* Правый отступ */
+color: #06cf1e; /* Цвет суммы */
+}
+
+/* Текст карточки (справа снизу) */
+.card .title {
+font-size: 18px; /* Размер шрифта заголовка */
+font-weight: 600; /* Полужирный шрифт */
+position: absolute;
+bottom: 10px; /* Нижний отступ */
+right: 20px; /* Правый отступ */
+color: #fffefe; /* Цвет заголовка */
+}
+
+/* Статистика карточки */
+.card .stat {
+font-size: 16px; /* Уменьшенный размер шрифта для статистики */
+color: #666; /* Более светлый серый цвет для текста */
+}
+
+/* Стили для карточек с разными цветами */
+.card.soft-blue .icon,
+.card.soft-green .icon,
+.card.peach .icon,
+.card.lavender .icon,
+.card.turquoise .icon,
+.card.pink .icon {
+color: #C0C0C0; /* Белые иконки для всех карточек */
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+.card {
+    width: calc(50% - 20px); /* На маленьких экранах карточки будут занимать 50% ширины контейнера */
+}
+}
+
+@media (max-width: 480px) {
+.card {
+    width: 100%; /* На очень маленьких экранах карточки будут занимать 100% ширины контейнера */
+}
+}
+
+/* Эффект при наведении и нажатии */
+.card:hover {
+transform: translateY(-5px); /* Подъем карточки при наведении */
+box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Более выраженная тень при наведении */
+}
+
+.card:active {
+transform: scale(0.98); /* Уменьшение карточки при нажатии */
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Уменьшение тени */
+}
+
+
+
+
+
+/* Стиль для модального окна */
+.modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 100;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .modal-content {
+            background-color: #fefefe7d;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        /* Стиль для кнопок */
+        .add-btn, .delete-btn, .edit-btn {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            left: 100;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        
+        .delete-btn {
+            background-color: #dc3545; /* Красный цвет для кнопки удаления */
+        }
+        
+        .edit-btn {
+            background-color: #ffc107; /* Желтый цвет для кнопки редактирования */
+        }
+
+
+</style>   
+</head>
+<body onload="checkAuth()">
+    <div class="sidebar">
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="tabs">
+            <button id="SalesReportTab" class="tablink" onclick="openTab(event, 'SalesReport')">
+                <i class="fas fa-chart-line"></i> <span class="tabtext">Отчёт по продажам</span>
+            </button>
+            <button id="CapitalReportTab" class="tablink" onclick="openTab(event, 'CapitalReport')">
+                <i class="fas fa-dollar-sign"></i> <span class="tabtext">Отчёт по капиталу</span>
+            </button>
+            <button id="ObjectReportTab" class="tablink" onclick="openTab(event, 'ObjectReport')">
+                <i class="fa-solid fa-house"></i> <span class="tabtext">Отчёт по объектам</span>
+            </button>
+            <button id="ListobjectsReportTab" class="tablink" onclick="openTab(event, 'ListobjectsReport')">
+                <i class="fa-sharp fa-solid fa-clipboard-list"></i> <span class="tabtext">Список объектов</span>
+            </button>
+            <button id="HistoryManagementTab" class="tablink" onclick="openTab(event, 'HistoryManagement')">
+                <i class="fa-solid fa-clock-rotate-left"></i> <span class="tabtext">История действий</span>
+            </button>
+            <button id="AdminManagementTab" class="tablink" onclick="openTab(event, 'AdminManagement')">
+                <i class="fas fa-user"></i> <span class="tabtext">Администратор</span>
+            </button>
+            <button id="EndthesessiontTab" class="tablink" onclick="logout()">
+                <i class="fa-solid fa-power-off"></i> <span class="tabtext">Завершить сеанс</span>
+            </button>
+        </div>
+        </div>
+   <!-- Контент -->
+<div class="content">
+    
+    <!-- Вкладка "Отчёт по продажам" -->
+    <div class="tabcontent active" id="SalesReport" style="display: block;">
+        <h2>Отчёт по продажам</h2>
+        
+        <!-- Контейнер для карточек -->
+        <div class="container">
+            <!-- Первая карточка -->
+            <div class="card soft-blue">
+                <div class="title">ИНВЕСТИЦИИ</div>
+                <i class="fa-solid fa-hand-holding-dollar icon"></i>
+                <div class="value">$700,000</div>
+            </div>
+            
+            <!-- Вторая карточка -->
+            <div class="card soft-green">
+                <div class="title">ДОХОД</div>
+                <i class="fa-solid fa-chart-line icon"></i>
+                <div class="value">$30,000</div>
+            </div>
+        
+            <!-- Третья карточка -->
+            <div class="card lavender">
+                <div class="title">БАЛАНС</div>
+                <i class="fa-solid fa-money-check-dollar icon"></i>
+                <div class="value">$320,000</div>
+            </div>
+        
+            <!-- Четвертая карточка -->
+            <div class="card peach">
+                <div class="title">ДИВИДЕНДЫ</div>
+                <i class="fa-solid fa-chart-pie icon"></i>
+                <div class="value">$100,000</div>
+            </div>
+        
+            <!-- Пятая карточка -->
+            <div class="card turquoise">
+                <div class="title">ПРИОБРЕТЕНИЯ</div>
+                <i class="fa-solid fa-angles-up icon"></i>
+                <div class="value">$460,000</div>
+            </div>
+        
+            <!-- Шестая карточка -->
+            <div class="card pink">
+                <div class="title">АКТИВЫ</div>
+                <i class="fa-solid fa-landmark icon"></i>
+                <div class="value">$345,000</div>
+            </div>
+        </div> <!-- Закрытие контейнера для карточек -->
+        
+        <!-- Блок с таблицами -->
+        <div>
+            <!-- Таблица с двумя колонками -->
+            <table>
+                <tr>
+                    <!-- Первая колонка заголовков и данных -->
+                    <td>
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">Показатели</th>
+                                    <th colspan="2">Нарастающим итогом</th>
+                                </tr>
+                                <tr>
+                                    <th>Кол-во</th>
+                                    <th>Сумма</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Первая строка: Начисленная сумма к оплате -->
+                                <tr>
+                                    <td class="text-left">Начисленная сумма к оплате</td>
+                                    <td>
+                                        <span class="number-right" id="report-objects-count">10</span>
+                                    </td>
+                                    <td>
+                                        <span class="number-right" id="report-objects-value">$200,000</span>
+                                    </td>
+                                </tr>
+                            
+                                <!-- Вторая строка: Фактически оплаченная сумма -->
+                                <tr>
+                                    <td class="text-left">Фактически оплаченная сумма</td>
+                                    <td>
+                                        <span class="number-right" id="report-paid-sum-count">10</span>
+                                    </td>
+                                    <td>
+                                        <span class="number-right" id="report-paid-sum-value">$200,000</span>
+                                    </td>
+                                </tr>
+                            
+                                <!-- Третья строка: Остаётся к оплате -->
+                                <tr>
+                                    <td class="text-left">Остаётся к оплате</td>
+                                    <td>
+                                        <span class="number-right" id="report-remaining-sum-count">10</span>
+                                    </td>
+                                    <td>
+                                        <span class="number-right" id="report-remaining-sum-value">$200,000</span>
+                                    </td>
+                                </tr>
+                            
+                                <!-- Четвёртая строка: Просроченные платежи -->
+                                <tr>
+                                    <td class="text-left">Просроченные платежи</td>
+                                    <td>
+                                        <span class="number-right" id="report-overdue-payments-count">10</span>
+                                    </td>
+                                    <td>
+                                        <span class="number-right" id="report-overdue-payments-value">$5,000</span>
+                                    </td>
+                                </tr>
+                            
+                                <!-- Пятая строка: Возвратность (%) -->
+                                <tr>
+                                    <td class="text-left">Возвратность (%)</td>
+                                    <td>
+                                        <span class="number-right" id="report-interest">*</span>
+                                    </td>
+                                    <td>
+                                        <span class="number-right" id="report-interest-second">15%</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    
+                    <!-- Вторая колонка заголовков и данных -->
+                    <td>
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Отчётный период</th>
+                                </tr>
+                                <tr>
+                                    <th>Кол-во</th>
+                                    <th>Сумма</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>$110,000</td>
+                                    <td>$230,000</td>
+                                </tr>
+                                <tr>
+                                    <td>$90,000</td>
+                                    <td>$180,000</td>
+                                </tr>
+                                <tr>
+                                    <td>$90,000</td>
+                                    <td>$180,000</td>
+                                </tr>
+                                <tr>
+                                    <td>$20,000</td>
+                                    <td>$50,000</td>
+                                </tr>
+                                <tr>
+                                    <td>*</td>
+                                    <td>15%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div> <!-- Закрытие блока с таблицами -->
+        
+    </div> <!-- Закрытие вкладки "Отчёт по продажам" -->
+    
+    <!-- Вкладка "Отчёт по капиталу" -->
+    <div class="tabcontent" id="CapitalReport">
+        <h2>Отчёт по капиталу</h2>
+        <button onclick="addRow()">+ добавить</button>
+        <table id="cashFlowTable" class="report-table">
+            <thead>
+                <tr>
+                    <th>НАИМЕНОВАНИЕ ОПЕРАЦИИ</th>
+                    <th>РЕЗУЛЬТАТ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-left">ВЛОЖЕННЫЕ ИНВЕСТИЦИИ</td>
+                   <td>
+                        <span class="number-right" id="cashFlow-investments">$700,000</span>
+                    </td>
+                </tr>
+               <tr>
+                <td class="text-left">ПРИОБРЕТЁННЫЕ ОБЪЕКТЫ</td>
+                   <td>
+                        <span class="number-right" id="cashFlow-acquired-objects">$460,000</span>
+                    </td>    
+                </tr>
+                <tr>
+                    <td class="text-left">РЕАЛИЗОВАННЫЕ ОБЪЕКТЫ</td>
+                   <td>
+                        <span class="number-right" id="cashFlow-sold-objects">$190,000</span>
+                    </td>    
+                   </tr>
+                <tr>
+                    <td class="text-left">ИЗ НИХ ДОХОД</td>
+                    <td>
+                         <span class="number-right" id="cashFlow-income">$30,000</span>
+                     </td>   
+                </tr>
+                <tr>
+                    <td class="text-left">ДРУГИЕ РАСХОДЫ</td>
+                    <td>
+                         <span class="number-right" id="cashFlow-other-expenses">$10,000</span>
+                     </td>   
+                </tr>
+                <tr>
+                    <td class="text-left">ПОЛУЧЕННЫЕ ДИВИДЕНДЫ</td>
+                    <td>
+                         <span class="number-right" id="cashFlow-dividends">$100,000</span>
+                     </td>  
+                </tr>
+                <tr>
+                    <td class="text-left">БАЛАНС</td>
+                    <td>
+                         <span class="number-right" id="cashFlow-cash-balance">$100,000</span>
+                     </td>  
+                </tr>
+            </tbody>
+        </table>
+    </div> <!-- Закрытие вкладки "Отчёт по капиталу" -->
+    
+    <!-- Вкладка "Отчёт по объектам" -->
+    <div class="tabcontent" id="ObjectReport"> 
+        <h2>Отчёт по объектам</h2>
+        <table id="ObjectReportTable" class="report-table">
+            <tr>
+                <th rowspan="2">№</th>
+                <th rowspan="2">Тип операции</th>
+                <th colspan="2">Итого</th>
+                <th colspan="4">Из них</th>
+            </tr>
+            <tr>
+                <th>Количество</th>
+                <th>Сумма</th>
+                <th>Количество</th>
+                <th>Сумма</th>
+                <th>Количество</th>
+                <th>Сумма</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Приобретённые объекты</td>
+                <td>10</td>
+                <td>460 000,0</td>
+                <td>4</td>
+                <td>340 000,0</td>
+                <td>6</td>
+                <td>120 000,0</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Проданные объекты (полностью)</td>
+                <td>2</td>
+                <td>190 000,0</td>
+                <td>2</td>
+                <td>190 000,0</td>
+                <td>0</td>
+                <td>0,0</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Полученный доход</td>
+                <td>*</td>
+                <td>30 000,0</td>
+                <td>*</td>
+                <td>30 000,0</td>
+                <td>*</td>
+                <td>0,0</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Оставшиеся объекты</td>
+                <td>8</td>
+                <td>345 000,0</td>
+                <td>2</td>
+                <td>215 000,0</td>
+                <td>6</td>
+                <td>130 000,0</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>в том числе:</td>
+                <td colspan="6"></td>
+            </tr>
+            <tr>
+                <td>4.1</td>
+                <td>Объекты в реализации</td>
+                <td>7</td>
+                <td>325 000,0</td>
+                <td>2</td>
+                <td>215 000,0</td>
+                <td>5</td>
+                <td>110 000,0</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>- Подлежит оплате в отчётном периоде</td>
+                <td>*</td>
+                <td>13 125,0</td>
+                <td>*</td>
+                <td>6 041,7</td>
+                <td>*</td>
+                <td>7 083,3</td>
+            </tr>
+            <tr class="highlight">
+                <td>4.1.1</td>
+                <td>Оплаченная часть</td>
+                <td>7</td>
+                <td>62 083,3</td>
+                <td>2</td>
+                <td>55 000,0</td>
+                <td>5</td>
+                <td>7 083,3</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>- Оплачено в отчётном периоде</td>
+                <td>5</td>
+                <td>7 083,3</td>
+                <td>0</td>
+                <td>0,0</td>
+                <td>5</td>
+                <td>7 083,3</td>
+            </tr>
+            <tr class="highlight">
+                <td></td>
+                <td>- Процент (%) Итого</td>
+                <td>*</td>
+                <td>19,1%</td>
+                <td>*</td>
+                <td>25,6%</td>
+                <td>*</td>
+                <td>6,4%</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>- Процент (%) Отчётный период</td>
+                <td>*</td>
+                <td>54,0%</td>
+                <td>*</td>
+                <td>0,0%</td>
+                <td>*</td>
+                <td>100,0%</td>
+            </tr>
+            <tr>
+                <td>4.1.2</td>
+                <td>Просроченные платежи</td>
+                <td>2</td>
+                <td>23 541,7</td>
+                <td>2</td>
+                <td>23 541,7</td>
+                <td>0</td>
+                <td>0,0</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>- В отчётном периоде</td>
+                <td>2</td>
+                <td>6 041,7</td>
+                <td>2</td>
+                <td>6 041,7</td>
+                <td>0</td>
+                <td>0,0</td>
+            </tr>
+            <tr>
+                <td>4.2</td>
+                <td>На складе (нет клиента)</td>
+                <td>1</td>
+                <td>20 000,0</td>
+                <td>0</td>
+                <td>0,0</td>
+                <td>1</td>
+                <td>20 000,0</td>
+            </tr>
+        </table>
+        
+    
+    </div>
+        </div> <!-- Закрытие вкладки "Отчёт по объектам" -->
+    
+
+
+
+
+    <!-- Вкладка "Список объектов" -->
+    <div class="tabcontent" id="ListobjectsReport"> 
+        <h2>Список объектов</h2>
+       
+<!-- Кнопка "Добавить" -->
+<button id="addBtn" class="add-btn">+ добавить</button>
+
+<!-- Кнопка "Редактировать" -->
+<button id="editBtn" class="edit-btn">+ редактировать</button>
+
+<!-- Кнопка "Удалить" -->
+<button id="deleteBtn" class="delete-btn">+ удалить</button>
+
+
+
+
+
+<!-- Модальное окно (карточка) для добавления объекта -->
+<div id="addModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" data-modal="addModal">&times;</span>
+        <h2>Добавить новый объект</h2>
+        <form id="addForm">
+            <!-- Поля формы для добавления объекта -->
+            <label for="objectId">ID:</label>
+            <input type="text" id="objectId" name="objectId" required>
+
+            <label for="objectName">Название объекта:</label>
+            <input type="text" id="objectName" name="objectName" required>
+
+            <label for="objectType">Тип объекта:</label>
+            <input type="text" id="objectType" name="objectType" required>
+
+            <label for="objectCount">Количество объектов:</label>
+            <input type="number" id="objectCount" name="objectCount" required>
+
+            <label for="purchaseDate">Дата покупки:</label>
+            <input type="date" id="purchaseDate" name="purchaseDate" required>
+
+            <label for="purchaseAmount">Сумма покупки:</label>
+            <input type="text" id="purchaseAmount" name="purchaseAmount" required>
+
+            <label for="buyerName">Покупатель Ф.И.О.:</label>
+            <input type="text" id="buyerName" name="buyerName" required>
+
+            <label for="buyerPhone">Покупатель Телефон:</label>
+            <input type="text" id="buyerPhone" name="buyerPhone" required>
+
+            <label for="editBuyerId">Покупатель Паспорт/ID:</label>
+            <input type="text" id="editBuyerId" name="buyerId" required>
+        
+            <label for="editBuyerAddress">Покупатель Адрес проживания:</label>
+            <input type="text" id="editBuyerAddress" name="buyerAddress" required>
+        
+            <label for="editOwnerRegistration">Оформление на владельца:</label>
+            <input type="text" id="editOwnerRegistration" name="ownerRegistration" required>
+        
+            <label for="editGuarantorName">Поручитель Ф.И.О.:</label>
+            <input type="text" id="editGuarantorName" name="guarantorName" required>
+        
+            <label for="editGuarantorPhone">Поручитель Телефон:</label>
+            <input type="text" id="editGuarantorPhone" name="guarantorPhone" required>
+        
+            <label for="editGuarantorId">Поручитель Паспорт/ID:</label>
+            <input type="text" id="editGuarantorId" name="guarantorId" required>
+        
+            <label for="editGuarantorAddress">Поручитель Адрес проживания:</label>
+            <input type="text" id="editGuarantorAddress" name="guarantorAddress" required>
+        
+            <label for="editContractNumber">Номер договора:</label>
+            <input type="text" id="editContractNumber" name="contractNumber" required>
+        
+            <label for="editContractDate">Дата заключения:</label>
+            <input type="date" id="editContractDate" name="contractDate" required>
+        
+            <label for="editTermMonths">Срок выполнения (месяцев):</label>
+            <input type="number" id="editTermMonths" name="termMonths" required>
+        
+            <label for="editTimeElapsed">Прошло (месяцев):</label>
+            <input type="number" id="editTimeElapsed" name="timeElapsed" required>
+        
+            <label for="editCompletionDate">Дата завершения:</label>
+            <input type="date" id="editCompletionDate" name="completionDate" required>
+        
+            <label for="editSalePrice">Цена продажи объекта:</label>
+            <input type="text" id="editSalePrice" name="salePrice" required>
+        
+            <label for="editDiscount">Скидка:</label>
+            <input type="text" id="editDiscount" name="discount" required>
+        
+            <label for="editProfitAmount">Прибыль Сумма:</label>
+            <input type="text" id="editProfitAmount" name="profitAmount" required>
+        
+            <label for="editProfitPercent">Прибыль %:</label>
+            <input type="text" id="editProfitPercent" name="profitPercent" required>
+        
+            <label for="editTotalAmountDue">Итого сумма к оплате:</label>
+            <input type="text" id="editTotalAmountDue" name="totalAmountDue" required>
+        
+            <label for="editInitialPayment">Из них, первоначальный взнос:</label>
+            <input type="text" id="editInitialPayment" name="initialPayment" required>
+        
+            <label for="editMonthlyPayment">Ежемесячный платеж:</label>
+            <input type="text" id="editMonthlyPayment" name="monthlyPayment" required>
+        
+            <label for="editPaymentDeadline">Срок оплаты:</label>
+            <input type="date" id="editPaymentDeadline" name="paymentDeadline" required>
+        
+            <label for="editLatePayments">Платежи по сроку, просроченные платежи:</label>
+            <input type="text" id="editLatePayments" name="latePayments" required>
+        
+            <label for="editLatePaymentsPeriod">Из них, за отчетный период:</label>
+            <input type="text" id="editLatePaymentsPeriod" name="latePaymentsPeriod" required>
+        
+            <label for="editTotalPaid">Оплаченная сумма, Итого:</label>
+            <input type="text" id="editTotalPaid" name="totalPaid" required>
+        
+            <label for="editPaidDuringPeriod">Оплаченная сумма, Из них за отчетный период:</label>
+            <input type="text" id="editPaidDuringPeriod" name="paidDuringPeriod" required>
+        
+            <label for="editRemainingAmount">Остаток суммы, Итого:</label>
+            <input type="text" id="editRemainingAmount" name="remainingAmount" required>
+        
+            <label for="editRemainingAmountPeriod">Остаток суммы, Из них за отчетный период:</label>
+            <input type="text" id="editRemainingAmountPeriod" name="remainingAmountPeriod" required>
+        
+            <label for="editOverduePayments">Просроченные платежи, Итого:</label>
+            <input type="text" id="editOverduePayments" name="overduePayments" required>
+        
+            <label for="editOverduePaymentsPeriod">Просроченные платежи, Из них за отчетный период:</label>
+            <input type="text" id="editOverduePaymentsPeriod" name="overduePaymentsPeriod" required>
+        
+            <label for="editStatus">Состояние:</label>
+            <input type="text" id="editStatus" name="status" required>
+        
+            <button type="submit">Добавить</button>
+        </form>
+    </div>
+</div>
+
+<!-- Модальное окно (карточка) для редактирования объекта -->
+<div id="editModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" data-modal="editModal">&times;</span>
+        <h2>Редактировать объект</h2>
+        <form id="editForm">
+            <!-- Поля формы для редактирования объекта -->
+            <label for="editObjectId">ID:</label>
+            <input type="text" id="editObjectId" name="objectId" disabled>
+
+            <label for="editObjectName">Название объекта:</label>
+            <input type="text" id="editObjectName" name="objectName" required>
+
+            <label for="editObjectType">Тип объекта:</label>
+            <input type="text" id="editObjectType" name="objectType" required>
+
+            <label for="editObjectCount">Количество объектов:</label>
+            <input type="number" id="editObjectCount" name="objectCount" required>
+
+            <label for="editPurchaseDate">Дата покупки:</label>
+            <input type="date" id="editPurchaseDate" name="purchaseDate" required>
+
+            <label for="editPurchaseAmount">Сумма покупки:</label>
+            <input type="text" id="editPurchaseAmount" name="purchaseAmount" required>
+
+            <label for="editBuyerName">Покупатель Ф.И.О.:</label>
+    <input type="text" id="editBuyerName" name="buyerName" required>
+
+    <label for="editBuyerPhone">Покупатель Телефон:</label>
+    <input type="text" id="editBuyerPhone" name="buyerPhone" required>
+
+    <label for="editBuyerId">Покупатель Паспорт/ID:</label>
+    <input type="text" id="editBuyerId" name="buyerId" required>
+
+    <label for="editBuyerAddress">Покупатель Адрес проживания:</label>
+    <input type="text" id="editBuyerAddress" name="buyerAddress" required>
+
+    <label for="editOwnerRegistration">Оформление на владельца:</label>
+    <input type="text" id="editOwnerRegistration" name="ownerRegistration" required>
+
+    <label for="editGuarantorName">Поручитель Ф.И.О.:</label>
+    <input type="text" id="editGuarantorName" name="guarantorName" required>
+
+    <label for="editGuarantorPhone">Поручитель Телефон:</label>
+    <input type="text" id="editGuarantorPhone" name="guarantorPhone" required>
+
+    <label for="editGuarantorId">Поручитель Паспорт/ID:</label>
+    <input type="text" id="editGuarantorId" name="guarantorId" required>
+
+    <label for="editGuarantorAddress">Поручитель Адрес проживания:</label>
+    <input type="text" id="editGuarantorAddress" name="guarantorAddress" required>
+
+    <label for="editContractNumber">Номер договора:</label>
+    <input type="text" id="editContractNumber" name="contractNumber" required>
+
+    <label for="editContractDate">Дата заключения:</label>
+    <input type="date" id="editContractDate" name="contractDate" required>
+
+    <label for="editTermMonths">Срок выполнения (месяцев):</label>
+    <input type="number" id="editTermMonths" name="termMonths" required>
+
+    <label for="editTimeElapsed">Прошло (месяцев):</label>
+    <input type="number" id="editTimeElapsed" name="timeElapsed" required>
+
+    <label for="editCompletionDate">Дата завершения:</label>
+    <input type="date" id="editCompletionDate" name="completionDate" required>
+
+    <label for="editSalePrice">Цена продажи объекта:</label>
+    <input type="text" id="editSalePrice" name="salePrice" required>
+
+    <label for="editDiscount">Скидка:</label>
+    <input type="text" id="editDiscount" name="discount" required>
+
+    <label for="editProfitAmount">Прибыль Сумма:</label>
+    <input type="text" id="editProfitAmount" name="profitAmount" required>
+
+    <label for="editProfitPercent">Прибыль %:</label>
+    <input type="text" id="editProfitPercent" name="profitPercent" required>
+
+    <label for="editTotalAmountDue">Итого сумма к оплате:</label>
+    <input type="text" id="editTotalAmountDue" name="totalAmountDue" required>
+
+    <label for="editInitialPayment">Из них, первоначальный взнос:</label>
+    <input type="text" id="editInitialPayment" name="initialPayment" required>
+
+    <label for="editMonthlyPayment">Ежемесячный платеж:</label>
+    <input type="text" id="editMonthlyPayment" name="monthlyPayment" required>
+
+    <label for="editPaymentDeadline">Срок оплаты:</label>
+    <input type="date" id="editPaymentDeadline" name="paymentDeadline" required>
+
+    <label for="editLatePayments">Платежи по сроку, просроченные платежи:</label>
+    <input type="text" id="editLatePayments" name="latePayments" required>
+
+    <label for="editLatePaymentsPeriod">Из них, за отчетный период:</label>
+    <input type="text" id="editLatePaymentsPeriod" name="latePaymentsPeriod" required>
+
+    <label for="editTotalPaid">Оплаченная сумма, Итого:</label>
+    <input type="text" id="editTotalPaid" name="totalPaid" required>
+
+    <label for="editPaidDuringPeriod">Оплаченная сумма, Из них за отчетный период:</label>
+    <input type="text" id="editPaidDuringPeriod" name="paidDuringPeriod" required>
+
+    <label for="editRemainingAmount">Остаток суммы, Итого:</label>
+    <input type="text" id="editRemainingAmount" name="remainingAmount" required>
+
+    <label for="editRemainingAmountPeriod">Остаток суммы, Из них за отчетный период:</label>
+    <input type="text" id="editRemainingAmountPeriod" name="remainingAmountPeriod" required>
+
+    <label for="editOverduePayments">Просроченные платежи, Итого:</label>
+    <input type="text" id="editOverduePayments" name="overduePayments" required>
+
+    <label for="editOverduePaymentsPeriod">Просроченные платежи, Из них за отчетный период:</label>
+    <input type="text" id="editOverduePaymentsPeriod" name="overduePaymentsPeriod" required>
+
+    <label for="editStatus">Состояние:</label>
+    <input type="text" id="editStatus" name="status" required>
+
+            <button type="submit">Сохранить изменения</button>
+        </form>
+    </div>
+</div>
+
+<!-- Таблица объектов -->
+<div class="table-container">
+    <table id="objectTable" class="report-table">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>ID</th>
+                <th>Название объекта</th>
+                <th>Тип объекта</th>
+                <th>Количество объектов</th>
+                <th>Дата покупки</th>
+                <th>Сумма покупки</th>
+                <th>Покупатель Ф.И.О.</th>
+                <th>Покупатель Телефон</th>
+                <th>Покупатель Паспорт/ID</th>
+                <th>Покупатель Адрес проживания</th>
+                <th>Оформление на владельца</th>
+                <th>Поручитель Ф.И.О.</th>
+                <th>Поручитель Телефон</th>
+                <th>Поручитель Паспорт/ID</th>
+                <th>Поручитель Адрес проживания</th>
+                <th>Номер договора</th>
+                <th>Дата заключения</th>
+                <th>Срок выполнения (месяцев)</th>
+                <th>Прошло</th>
+                <th>Дата завершения</th>
+                <th>Цена продажи объекта</th>
+                <th>Скидка</th>
+                <th>Прибыль Сумма</th>
+                <th>Прибыль %</th>
+                <th>Итого сумма к оплате</th>
+                <th>Из них, первоначальный взнос</th>
+                <th>Ежемесячный платеж</th>
+                <th>Срок оплаты</th>
+                <th>Платежи по сроку, просроченные платежи</th>
+                <th>Из них, за отчетный период</th>
+                <th>Оплаченная сумма, Итого</th>
+                <th>Оплаченная сумма, Из них за отчетный период</th>
+                <th>Остаток суммы, Итого</th>
+                <th>Остаток суммы, Из них за отчетный период</th>
+                <th>Просроченные платежи, Итого</th>
+                <th>Просроченные платежи, Из них за отчетный период</th>
+                <th>Состояние</th>
+            </tr>
+        </thead>
+        <tbody id="objectTableBody">
+            <!-- Пример строки -->
+            <tr>
+                <td>1</td>
+                <td>1001</td>
+                <td>Квартира в центре</td>
+                <td>Жилой</td>
+                <td>1</td>
+                <td>2024-03-05</td>
+                <td>7,500,000</td>
+                <td>Алексеев Алексей Алексеевич</td>
+                <td>+7 (900) 555-12-34</td>
+                <td>1111 2222</td>
+                <td>ул. Ленина, д. 12, кв. 34</td>
+                <td></td> <!-- Оформление на владельца -->
+                <td>Петров Петр Петрович</td>
+                <td>+7 (900) 555-56-78</td>
+                <td>3333 4444</td>
+                <td>ул. Карла Маркса, д. 8</td>
+                <td>AB12345</td>
+                <td>2024-03-10</td>
+                <td>24</td>
+                <td>0</td> <!-- Прошло: еще не завершено -->
+                <td>2026-03-10</td>
+                <td>8,000,000</td>
+                <td>200,000</td>
+                <td>600,000</td>
+                <td>7.50%</td>
+                <td>7,800,000</td>
+                <td>200,000</td>
+                <td>30,000</td>
+                <td>24</td>
+                <td>0</td> <!-- Платежи по сроку, просроченные платежи: нет -->
+                <td>0</td> <!-- Из них, за отчетный период: нет -->
+                <td>0</td> <!-- Оплаченная сумма, Итого: нет -->
+                <td>0</td> <!-- Оплаченная сумма, Из них за отчетный период: нет -->
+                <td>7,800,000</td> <!-- Остаток суммы, Итого: еще не оплачено -->
+                <td>7,800,000</td> <!-- Остаток суммы, Из них за отчетный период: еще не оплачено -->
+                <td>0</td> <!-- Просроченные платежи, Итого: нет -->
+                <td>0</td> <!-- Просроченные платежи, Из них за отчетный период: нет -->
+                <td>В процессе</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+
+
+
+
+    </div> <!-- Закрытие вкладки "Список объектов" -->
+    
+    <!-- Вкладка "История действий" -->
+    <div class="tabcontent" id="HistoryManagement">
+        <h2>История действий</h2>
+    </div> <!-- Закрытие вкладки "История действий" -->
+    
+    <!-- Вкладка "Администрирование" -->
+    <div class="tabcontent" id="AdminManagement">
+        <h2>Администрирование</h2>
+    </div> <!-- Закрытие вкладки "Администрирование" -->
+    
+</div> <!-- Закрытие контейнера "content" -->
+
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+<!-- Подключение внешнего JavaScript файла -->
+<script src="script.js"></script>
+<script>
+    function openTab(evt, tabName) {
+      let i, tabcontent, tablinks;
+  
+      // Скрываем все элементы с классом "tabcontent"
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "none";
+      }
+  
+      // Убираем класс "active" со всех кнопок
+      tablinks = document.getElementsByClassName("tablink");
+      for (i = 0; i < tablinks.length; i++) {
+          tablinks[i].classList.remove("active");
+      }
+  
+      // Показываем выбранную вкладку
+      const activeTab = document.getElementById(tabName);
+      if (activeTab) {
+          activeTab.style.display = "block";
+      } else {
+          console.error('Элемент с id "' + tabName + '" не найден.');
+      }
+  
+      // Добавляем класс "active" к нажатой кнопке
+      evt.currentTarget.classList.add("active");
+  }
+  
+
+
+
+  // Функция для скрытия и отображения боковой панели (sidebar)
+  function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar'); // Получаем элемент с классом 'sidebar'
+            const content = document.querySelector('.content'); // Получаем элемент с классом 'content'
+            sidebar.classList.toggle('active'); // Переключаем активный класс у боковой панели
+            content.classList.toggle('active'); // Переключаем активный класс у содержимого
+        }
+
+
+
+
+   // Функция для проверки авторизации пользователя
+   function checkAuth() {
+        fetch('/user-role') // Запрос на сервер для получения роли пользователя
+            .then(response => response.json()) // Преобразуем ответ в JSON
+            .then(data => {
+                const role = data.role; // Получаем роль пользователя из данных
+                
+                if (!role) { // Если роль не определена, перенаправляем на страницу входа
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Скрываем вкладки в зависимости от роли пользователя
+                if (role === 'admin') {
+                    document.getElementById('HistoryManagementTab').style.display = 'none'; // Скрываем вкладку управления историей
+                    document.getElementById('AdminManagementTab').style.display = 'none'; // Скрываем вкладку управления администрацией
+                }
+                if (role === 'user') {
+                    document.getElementById('CapitalReportTab').style.display = 'none'; // Скрываем вкладку отчета о капитале
+                    document.getElementById('ObjectReportTab').style.display = 'none'; // Скрываем вкладку отчета об объектах
+                    document.getElementById('ListobjectsReportTab').style.display = 'none'; // Скрываем вкладку отчета о списке объектов
+                    document.getElementById('HistoryManagementTab').style.display = 'none'; // Скрываем вкладку управления историей
+                    document.getElementById('AdminManagementTab').style.display = 'none'; // Скрываем вкладку управления администрацией
+                }
+
+                // Проверяем, залогинен ли пользователь
+                const isLoggedIn = localStorage.getItem('loggedIn'); // Проверяем флаг в локальном хранилище
+                if (!isLoggedIn) {
+                    window.location.href = 'login.html'; // Если пользователь не залогинен, перенаправляем на страницу входа
+                }
+            })
+            .catch(() => {
+                window.location.href = 'login.html'; // При ошибке запроса также перенаправляем на страницу входа
+            });
+    }
+  // Ждем, пока DOM полностью загрузится
+  document.addEventListener('DOMContentLoaded', function() {
+        const tabs = document.querySelectorAll('.tablink'); // Получаем все элементы с классом 'tablink'
+        const contentSections = document.querySelectorAll('.content-section'); // Получаем все элементы с классом 'content-section'
+    });
+
+
+
+
+
+    
+        
+        // Открытие модального окна добавления
+        addBtn.onclick = function() {
+            addModal.style.display = "block";
+        };
+        
+        // Открытие модального окна редактирования
+        editBtn.onclick = function() {
+            const selectedRow = document.querySelector("tr.selected");
+            if (selectedRow) {
+                // Заполнение полей редактирования данными выбранной строки
+                const cells = selectedRow.getElementsByTagName("td");
+                document.getElementById("editObjectId").value = cells[1].textContent;
+                document.getElementById("editObjectName").value = cells[2].textContent;
+                document.getElementById("editObjectType").value = cells[3].textContent;
+                document.getElementById("editObjectCount").value = cells[4].textContent;
+                document.getElementById("editPurchaseDate").value = cells[5].textContent;
+                document.getElementById("editPurchaseAmount").value = cells[6].textContent;
+                document.getElementById("editBuyerName").value = cells[7].textContent;
+                document.getElementById("editBuyerPhone").value = cells[8].textContent;
+                
+                editModal.style.display = "block";
+            } else {
+                alert("Выберите строку для редактирования");
+            }
+        };
+        
+        // Закрытие модальных окон
+        document.querySelectorAll(".close").forEach(span => {
+            span.onclick = function() {
+                const modal = document.getElementById(this.getAttribute("data-modal"));
+                modal.style.display = "none";
+            }
+        });
+        
+        // Добавление нового объекта в таблицу
+        addForm.onsubmit = function(event) {
+            event.preventDefault();
+            const id = document.getElementById("objectId").value;
+            const name = document.getElementById("objectName").value;
+            const type = document.getElementById("objectType").value;
+            const count = document.getElementById("objectCount").value;
+            const purchaseDate = document.getElementById("purchaseDate").value;
+            const purchaseAmount = document.getElementById("purchaseAmount").value;
+            const buyerName = document.getElementById("buyerName").value;
+            const buyerPhone = document.getElementById("buyerPhone").value;
+        
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                <td>${objectTableBody.rows.length + 1}</td>
+                <td>${id}</td>
+                <td>${name}</td>
+                <td>${type}</td>
+                <td>${count}</td>
+                <td>${purchaseDate}</td>
+                <td>${purchaseAmount}</td>
+                <td>${buyerName}</td>
+                <td>${buyerPhone}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            `;
+            objectTableBody.appendChild(newRow);
+        
+            addForm.reset();
+            addModal.style.display = "none";
+        };
+        
+        // Редактирование объекта
+        editForm.onsubmit = function(event) {
+            event.preventDefault();
+            const selectedRow = document.querySelector("tr.selected");
+            if (selectedRow) {
+                const id = document.getElementById("editObjectId").value;
+                const name = document.getElementById("editObjectName").value;
+                const type = document.getElementById("editObjectType").value;
+                const count = document.getElementById("editObjectCount").value;
+                const purchaseDate = document.getElementById("editPurchaseDate").value;
+                const purchaseAmount = document.getElementById("editPurchaseAmount").value;
+                const buyerName = document.getElementById("editBuyerName").value;
+                const buyerPhone = document.getElementById("editBuyerPhone").value;
+        
+                const cells = selectedRow.getElementsByTagName("td");
+                cells[1].textContent = id;
+                cells[2].textContent = name;
+                cells[3].textContent = type;
+                cells[4].textContent = count;
+                cells[5].textContent = purchaseDate;
+                cells[6].textContent = purchaseAmount;
+                cells[7].textContent = buyerName;
+                cells[8].textContent = buyerPhone;
+        
+                editModal.style.display = "none";
+            } else {
+                alert("Выберите строку для редактирования");
+            }
+        };
+        
+        // Обработка кнопки "Удалить"
+        deleteBtn.onclick = function() {
+            const selectedRow = document.querySelector("tr.selected");
+            if (selectedRow) {
+                objectTableBody.removeChild(selectedRow);
+            } else {
+                alert("Выберите строку для удаления");
+            }
+        };
+        
+        // Добавление класса "selected" к строкам таблицы при клике (для удаления и редактирования)
+        document.querySelectorAll("#objectTable tbody tr").forEach(row => {
+            row.onclick = function() {
+                document.querySelectorAll("#objectTable tbody tr").forEach(r => r.classList.remove("selected"));
+                this.classList.add("selected");
+            }
+        });
+
+
+
+
+
+  // Функция для выхода из системы (logout)
+  function logout() {
+      fetch('/logout', {
+          method: 'POST', // Используем метод POST для запроса
+          credentials: 'include' // Обеспечиваем отправку куки вместе с запросом
+      })
+      .then(response => {
+          if (response.ok) { // Если запрос успешен, перенаправляем на страницу входа
+              window.location.href = '/login.html';
+          } else {
+              console.error('Ошибка при завершении сеанса:', response.statusText); // Выводим ошибку в консоль при проблемах
+          }
+      })
+      .catch(error => {
+          console.error('Ошибка при завершении сеанса:', error); // Ловим и выводим ошибку в консоль
+      });
+  }
+  </script>
+  </body>
+</html>
