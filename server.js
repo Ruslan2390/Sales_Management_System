@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const mysql = require('mysql2');
 const fs = require('fs');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const app = express();
