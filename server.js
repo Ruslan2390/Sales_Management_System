@@ -73,6 +73,24 @@ const checkAuth = (req, res, next) => {
   }
 };
 
+
+
+// Основной маршрут для защиты
+app.get('/', (req, res) => {
+  console.log('Cookies on /:', req.cookies); // Логируем куки для отладки
+  if (req.cookies.role) {
+      console.log('Authenticated user accessing /');
+      res.redirect('/index.html'); // Перенаправление на основную страницу
+  } else {
+      console.log('Redirecting to login for unauthenticated user');
+      res.redirect('/login'); // Если не авторизован, перенаправляем на логин
+  }
+});
+
+
+
+
+
 // Маршрут для получения роли пользователя
 app.get('/user-role', (req, res) => {
   if (req.cookies.role) {
