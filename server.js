@@ -5,11 +5,7 @@ const fs = require('fs');
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
-
 const app = express();
-
-
-
 
 // Настройка подключения к MySQL
 const db = mysql.createConnection({
@@ -27,10 +23,6 @@ db.connect(err => {
   console.log('Подключение к базе данных успешно!');
 });
 
-
-
-
-
 // Логирование запросов
 app.use((req, res, next) => {
   console.log(`Received request for ${req.url} with method ${req.method}`);
@@ -41,8 +33,6 @@ app.use((req, res, next) => {
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-
 
 // Пути к файлу с данными пользователей
 const usersFilePath = path.join(__dirname, 'usersData.json'); // Путь к файлу с данными пользователей
@@ -62,9 +52,6 @@ const loadUsers = () => {
   }
 };
 
-
-
-
 // Функция для сохранения пользователей в JSON-файл
 const saveUsers = (users) => {
   try {
@@ -73,8 +60,6 @@ const saveUsers = (users) => {
     console.error('Ошибка записи файла:', error);
   }
 };
-
-
 
 // Middleware для проверки авторизации пользователя
 const checkAuth = (req, res, next) => {
@@ -97,17 +82,6 @@ app.get('/user-role', (req, res) => {
   }
 });
 
-// Основной маршрут
-app.get('/', (req, res) => {
-  console.log('Cookies on /:', req.cookies);
-  if (req.cookies.role) {
-    console.log('Authenticated user accessing /');
-    res.redirect('/index.html'); // Перенаправляем на основную страницу
-  } else {
-    console.log('Redirecting to login for unauthenticated user');
-    res.redirect('/login'); // Перенаправляем на страницу логина
-  }
-});
 
 // Маршрут для отображения страницы логина
 app.get('/login', (req, res) => {
@@ -146,9 +120,6 @@ app.post('/logout', (req, res) => {
   res.clearCookie('role'); // Удаляем куку с ролью
   res.redirect('/login'); // Перенаправляем на страницу логина
 });
-
-
-
 
 // Настройка сервера
 app.use(express.static(path.join(__dirname, 'public')));
