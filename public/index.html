@@ -1452,45 +1452,55 @@ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Уменьшение тени */
 
 
    // Функция для проверки авторизации пользователя
-   function checkAuth() {
-        fetch('/user-role') // Запрос на сервер для получения роли пользователя
-            .then(response => response.json()) // Преобразуем ответ в JSON
-            .then(data => {
-                const role = data.role; // Получаем роль пользователя из данных
-                
-                if (!role) { // Если роль не определена, перенаправляем на страницу входа
-                    window.location.href = 'login.html';
-                    return;
-                }
+function checkAuth() {
+    fetch('/user-role') // Запрос на сервер для получения роли пользователя
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok'); // Обработка ошибок сети
+            }
+            return response.json(); // Преобразуем ответ в JSON
+        })
+        .then(data => {
+            const role = data.role; // Получаем роль пользователя из данных
+            
+            // Если роль не определена, перенаправляем на страницу входа
+            if (!role) {
+                window.location.href = 'login.html';
+                return;
+            }
 
-                // Скрываем вкладки в зависимости от роли пользователя
-                if (role === 'admin') {
-                    document.getElementById('HistoryManagementTab').style.display = 'none'; // Скрываем вкладку управления историей
-                    document.getElementById('AdminManagementTab').style.display = 'none'; // Скрываем вкладку управления администрацией
-                }
-                if (role === 'user') {
-                    document.getElementById('CapitalReportTab').style.display = 'none'; // Скрываем вкладку отчета о капитале
-                    document.getElementById('ObjectReportTab').style.display = 'none'; // Скрываем вкладку отчета об объектах
-                    document.getElementById('ListobjectsReportTab').style.display = 'none'; // Скрываем вкладку отчета о списке объектов
-                    document.getElementById('HistoryManagementTab').style.display = 'none'; // Скрываем вкладку управления историей
-                    document.getElementById('AdminManagementTab').style.display = 'none'; // Скрываем вкладку управления администрацией
-                }
+            // Скрываем вкладки в зависимости от роли пользователя
+            if (role === 'admin') {
+                document.getElementById('HistoryManagementTab').style.display = 'none'; // Скрываем вкладку управления историей
+                document.getElementById('AdminManagementTab').style.display = 'none'; // Скрываем вкладку управления администрацией
+            }
+            if (role === 'user') {
+                document.getElementById('CapitalReportTab').style.display = 'none'; // Скрываем вкладку отчета о капитале
+                document.getElementById('ObjectReportTab').style.display = 'none'; // Скрываем вкладку отчета об объектах
+                document.getElementById('ListobjectsReportTab').style.display = 'none'; // Скрываем вкладку отчета о списке объектов
+                document.getElementById('HistoryManagementTab').style.display = 'none'; // Скрываем вкладку управления историей
+                document.getElementById('AdminManagementTab').style.display = 'none'; // Скрываем вкладку управления администрацией
+            }
 
-                // Проверяем, залогинен ли пользователь
-                const isLoggedIn = localStorage.getItem('loggedIn'); // Проверяем флаг в локальном хранилище
-                if (!isLoggedIn) {
-                    window.location.href = 'login.html'; // Если пользователь не залогинен, перенаправляем на страницу входа
-                }
-            })
-            .catch(() => {
-                window.location.href = 'login.html'; // При ошибке запроса также перенаправляем на страницу входа
-            });
-    }
-  // Ждем, пока DOM полностью загрузится
-  document.addEventListener('DOMContentLoaded', function() {
-        const tabs = document.querySelectorAll('.tablink'); // Получаем все элементы с классом 'tablink'
-        const contentSections = document.querySelectorAll('.content-section'); // Получаем все элементы с классом 'content-section'
-    });
+            // Проверяем, залогинен ли пользователь
+            const isLoggedIn = localStorage.getItem('loggedIn'); // Проверяем флаг в локальном хранилище
+            if (!isLoggedIn) {
+                window.location.href = 'login.html'; // Если пользователь не залогинен, перенаправляем на страницу входа
+            }
+        })
+        .catch((error) => {
+            console.error('Ошибка:', error); // Логируем ошибку
+            window.location.href = 'login.html'; // При ошибке запроса также перенаправляем на страницу входа
+        });
+}
+
+// Ждем, пока DOM полностью загрузится
+document.addEventListener('DOMContentLoaded', function() {
+    checkAuth(); // Вызываем функцию проверки авторизации
+    const tabs = document.querySelectorAll('.tablink'); // Получаем все элементы с классом 'tablink'
+    const contentSections = document.querySelectorAll('.content-section'); // Получаем все элементы с классом 'content-section'
+});
+
 
 
 
