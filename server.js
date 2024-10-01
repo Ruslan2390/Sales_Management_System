@@ -150,10 +150,15 @@ app.post('/logout', (req, res) => {
 
 
 
-
 // Настройка сервера
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Основной маршрут
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Запуск сервера
 app.listen(process.env.PORT || 3000, () => {
   console.log(`Сервер запущен на порту ${process.env.PORT || 3000}`);
 });
