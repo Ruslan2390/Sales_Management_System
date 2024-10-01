@@ -40,22 +40,22 @@ const usersFilePath = path.join(__dirname, 'usersData.json'); // Путь к ф�
 // Функция для загрузки данных пользователей из JSON-файла
 const loadUsers = () => {
   try {
-    if (fs.existsSync(usersFilePath)) { // Проверяем, существует ли файл с данными пользователей
-      const usersData = fs.readFileSync(usersFilePath); // Читаем данные из файла
-      return JSON.parse(usersData); // Возвращаем данные как объект JavaScript
+    if (fs.existsSync(usersFilePath)) {
+      const usersData = fs.readFileSync(usersFilePath);
+      return JSON.parse(usersData);
     } else {
-      return []; // Если файл не существует, возвращаем пустой массив
+      return [];
     }
   } catch (error) {
     console.error('Ошибка чтения файла:', error);
-    return []; // Возвращаем пустой массив в случае ошибки
+    return [];
   }
 };
 
 // Функция для сохранения пользователей в JSON-файл
 const saveUsers = (users) => {
   try {
-    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2)); // Записываем массив пользователей в файл
+    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
   } catch (error) {
     console.error('Ошибка записи файла:', error);
   }
@@ -63,33 +63,19 @@ const saveUsers = (users) => {
 
 // Middleware для проверки авторизации пользователя
 const checkAuth = (req, res, next) => {
-  console.log('Checking auth. Cookies:', req.cookies); // Логируем куки для отладки
-  if (req.cookies.role) { // Проверяем, есть ли кука с ролью
-    console.log('User is authenticated with role:', req.cookies.role);
+  if (req.cookies.role) {
     next(); // Если авторизован, передаем управление следующему middleware или маршруту
   } else {
-    console.log('User is not authenticated');
     res.redirect('/login'); // Перенаправляем на страницу логина
   }
 };
 
 
 
-// Основной маршрут для защиты
-app.get('/', (req, res) => {
-  console.log('Cookies on /:', req.cookies); // Логируем куки для отладки
-  if (req.cookies.role) {
-      console.log('Authenticated user accessing /');
-      res.redirect('/index.html'); // Перенаправление на основную страницу
-  } else {
-      console.log('Redirecting to login for unauthenticated user');
-      res.redirect('/login'); // Если не авторизован, перенаправляем на логин
-  }
+// Основной маршрут, защищённый проверкой авторизации
+app.get('/', checkAuth, (req, res) => {
+  res.redirect('/index.html'); // Перенаправляем на главную страницу
 });
-
-
-
-
 
 // Маршрут для получения роли пользователя
 app.get('/user-role', (req, res) => {
@@ -100,6 +86,14 @@ app.get('/user-role', (req, res) => {
   }
 });
 
+
+
+
+
+// Маршрут для отображения главной страницы
+app.get('/index.html', checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // Маршрут для отображения страницы логина
 app.get('/login', (req, res) => {

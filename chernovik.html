@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Подключение внешнего CSS-файла -->
+    <link rel="stylesheet" href="styles.css">
+
+
+
+
+<style>
+    /* Основные стили страницы */
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* Шрифт, похожий на iOS */
+background: #1d1f22; /* фон страницы */
+color: #ffffff; /* цвет текста */
+margin: 0;
+padding: 20px;
+display: flex; /* Flexbox, если нужно */
+}
+
+/* Заголовок */
+h2 {
+text-align: center;
+color:  #C0C0C0; /* Глубокий Синий для элегантности */
+font-size: 36px; /* Увеличенный размер шрифта для выразительности */
+font-weight: 600; /* Средний жирный шрифт для современного вида */
+margin-bottom: 20px; /* Уменьшенный отступ */
+text-transform: uppercase; /* Преобразование текста в верхний регистр для стиля */
+letter-spacing: 1px; /* Расстояние между буквами для акцента */
+position: relative; /* Для абсолютного позиционирования псевдоэлемента */
+padding-bottom: 10px; /* Отступ снизу для добавления подчеркивания */
+}
+
+h2::after {
+content: "";
+position: absolute;
+left: 50%;
+bottom: 0;
+width: 60%;
+height: 4px; /* Толщина линии */
+background: linear-gradient(to right, #00BFAE, #FF6F61); /* Градиентная линия в стиле iOS */
+transform: translateX(-50%); /* Центрирование линии */
+}
+
+
+/* Определение переменных для цветов */
+:root {
+--border-color: #fcfcfc; /* Цвет границ таблицы и ячеек */
+--outer-border-color: #f9fafa; /* Цвет самой крайней границы таблицы */
+}
+
+/* Таблицы */
+table {
+width: 100%;
+border-collapse: collapse;
+}
+
+/* Основной стиль таблиц */
+.report-table {
+background: #fcfcfc; /* Белый фон таблиц */
+border: 2px solid var(--outer-border-color); /* Цвет самой крайней границы таблицы */
+border-radius: 12px; /* Более округлые углы */
+overflow: hidden;
+margin-bottom: 20px;
+}
+
+.report-table th,
+.report-table td {
+border: 1px solid var(--border-color); /* Цвет границы вокруг ячеек */
+}
+
+.report-table th {
+background-color:  #2a2e32; /* Светлый фон для заголовков */
+color: #fcf8f8; /* Тёмно-серый цвет текста */
+text-align: left;
+padding: 12px;
+font-weight: 500; /* Полужирный шрифт */
+border-bottom: 2px solid var(--border-color); /* Тонкая светло-синяя линия под заголовком */
+text-align: center;
+}
+
+.report-table td {
+padding: 12px;
+color: #00ff1eb7; /* Тёмно-серый цвет текста */
+font-weight: 700; /* Жирный шрифт для выделения цифр */
+text-align: right;
+border-bottom: 1px solid var(--border-color); /* Линии разделения строк */
+}
+
+.report-table td[colspan="2"],
+.report-table td[colspan="3"] {
+text-align: left; /* Для более естественного отображения крупных ячеек */
+border: 1px solid var(--border-color); /* Цвет границы для ячеек с colspan 2 и 3 */
+}
+
+.report-table tr:last-child td {
+border-bottom: none; /* Убрать последнюю границу */
+}
+
+/* Общие стили для ячеек с идентификаторами, начинающимися на "report-" или "cashFlow-" */
+.report-table td[id^="report-"], 
+.report-table td[id^="cashFlow-"] {
+display: flex;
+justify-content: space-between; /* Элементы распределяются по разным сторонам */
+align-items: center; /* Центрирование по вертикали */
+font-weight: 700; /* Жирный шрифт для выделения цифр */
+color: #00ff1eb7; /* Цвет для выделения цифр (зелёный оттенок) */
+padding: 5px;
+}
+
+/* Текст внутри ячейки выравнивается по левому краю */
+.report-table .text-left {
+text-align: left;
+color: #fffefe; /* Черный цвет для текста */
+font-weight: 400; /* Нормальный шрифт для текста */
+}
+
+/* Цифры внутри ячейки выравниваются по правому краю */
+.report-table .number-right {
+text-align: right;
+color: #00ff1eb7; /* Цвет цифр */
+font-weight: 700; /* Жирный шрифт для цифр */
+}
+
+
+.report-table tr:nth-child(odd) td {
+background: #1d1f22; /* Более светлый фон для чередующихся строк */
+}
+
+.report-table tr:nth-child(even) td {
+background: #1d1f22; /* Белый фон */
+}
+
+
+
+
+
+/* Основные стили для сайдбара */
+.sidebar {
+    height: 100vh; /* Высота сайдбара на всю высоту экрана */
+    width: 60px; /* Изначально свернутый сайдбар (узкая ширина) */
+    background-color: #333; /* Темный фон сайдбара */
+    padding-top: 20px; /* Отступ сверху для содержания сайдбара */
+    border-right: 1px solid #444; /* Граница справа сайдбара */
+    position: fixed; /* Фиксированное позиционирование сайдбара */
+    transition: width 0.3s, background-color 0.3s; /* Плавное изменение ширины и фона при изменении */
+    overflow: hidden; /* Прятать содержимое, выходящее за пределы сайдбара */
+    display: flex; /* Использование flexbox для размещения элементов */
+    flex-direction: column; /* Расположение элементов по вертикали */
+    align-items: center; /* Выравнивание элементов по центру по горизонтали */
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1); /* Тень для сайдбара */
+}
+
+/* Расширение сайдбара при активации */
+.sidebar.active {
+    width: 250px; /* Расширение ширины при активации */
+}
+
+/* Стили для кнопки переключения сайдбара */
+.sidebar-toggle {
+    font-size: 24px; /* Размер шрифта иконки переключателя */
+    background: none; /* Без фона у кнопки */
+    border: none; /* Без границы у кнопки */
+    cursor: pointer; /* Курсор в виде указателя при наведении */
+    position: absolute; /* Абсолютное позиционирование кнопки */
+    top: 10px; /* Отступ сверху от края сайдбара */
+    left: 1px; /* Отступ слева от края сайдбара */
+    transition: color 0.3s; /* Плавное изменение цвета при наведении */
+    color: #fff; /* Цвет текста кнопки */
+}
+
+/* Цвет кнопки переключения при наведении */
+.sidebar-toggle:hover {
+    color: #e0e0e0; /* Светлый цвет текста при наведении */
+}
+
+/* Стили для контейнера вкладок в сайдбаре */
+.tabs {
+    display: flex; /* Использование flexbox для размещения вкладок */
+    flex-direction: column; /* Расположение вкладок по вертикали */
+    width: 100%; /* Ширина контейнера вкладок */
+    margin-top: 50px; /* Отступ сверху */
+    align-items: center; /* Выравнивание вкладок по центру по горизонтали */
+}
+
+/* Основные стили для вкладок сайдбара */
+.tablink {
+    background-color: #333; /* Темный фон вкладки */
+    border: none; /* Без границы у вкладки */
+    cursor: pointer; /* Курсор в виде указателя при наведении */
+    padding: 14px; /* Внутренний отступ для вкладки */
+    text-align: center; /* Выравнивание текста по центру */
+    font-size: 16px; /* Размер шрифта текста во вкладке */
+    width: 100%; /* Ширина вкладки */
+    display: flex; /* Использование flexbox для размещения содержимого вкладки */
+    align-items: center; /* Выравнивание элементов по центру по вертикали */
+    justify-content: center; /* Выравнивание элементов по центру по горизонтали */
+    border-radius: 12px; /* Скругление углов вкладки */
+    margin-bottom: 10px; /* Отступ снизу от других вкладок */
+    position: relative; /* Относительное позиционирование вкладки */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* Тень для вкладки */
+    color: #c0c0c0; /* Светло-серый цвет текста */
+    height: 60px; /* Высота вкладки */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Плавное изменение фона и цвета текста при наведении */
+}
+
+/* Скрытие текста вкладок при свернутом сайдбаре */
+.sidebar:not(.active) .tabtext {
+    display: none; /* Скрыть текст вкладок */
+}
+
+/* Стили для иконок вкладок при свернутом сайдбаре */
+.sidebar:not(.active) i {
+    font-size: 25px; /* Размер иконок */
+    color: #c0c0c0; /* Цвет иконок */
+}
+
+/* Стили для вкладок при активном сайдбаре */
+.sidebar.active .tablink {
+    justify-content: flex-start; /* Выравнивание элементов по левому краю */
+    padding: 14px 20px; /* Увеличенный внутренний отступ */
+}
+
+/* Стили для текста вкладок при активном сайдбаре */
+.sidebar.active .tabtext {
+    display: block; /* Отображение текста вкладок */
+    margin-left: 15px; /* Отступ слева от иконок */
+    transition: opacity 0.3s, visibility 0.3s; /* Плавное изменение видимости и непрозрачности текста */
+}
+
+/* Стили для иконок вкладок при активном сайдбаре */
+.sidebar.active i {
+    margin-right: 10px; /* Отступ справа от иконок */
+}
+
+/* Стили для активных и hovered вкладок */
+.tablink:hover,
+.tablink.active {
+    background-color: #444; /* Темный фон при наведении и для активной вкладки */
+    color: #fff; /* Белый цвет текста при наведении и для активной вкладки */
+}
+
+/* Стили для иконок вкладок при наведении и активной вкладке */
+.tablink:hover i,
+.tablink.active i {
+    color: #e0e0e0; /* Светлый цвет иконок при наведении и для активной вкладки */
+}
+
+/* Стили для основного контента */
+.content {
+    margin-left: 60px; /* Отступ слева для контента, чтобы не перекрывался сайдбаром */
+    padding: 20px; /* Внутренний отступ для контента */
+    transition: margin-left 0.3s; /* Плавное изменение отступа слева при переключении сайдбара */
+}
+
+/* Увеличение отступа слева контента при активном сайдбаре */
+.sidebar.active + .content {
+    margin-left: 250px; /* Увеличение отступа слева при расширенном сайдбаре */
+}
+
+/* Стили для вкладок контента */
+.tabcontent {
+    display: none; /* Скрытие всех вкладок по умолчанию */
+}
+
+/* Стили для активной вкладки контента */
+.tabcontent.active {
+    display: block; /* Отображение только активной вкладки */
+}
+
+
+
+/* Стили для кнопок */
+button {
+    padding: 10px 20px; /* Внутренний отступ для кнопок */
+    border: none; /* Без границы у кнопок */
+    background-color: #e0e0e0; /* Светлый фон кнопок */
+    color: #333; /* Темный цвет текста на кнопках */
+    font-size: 16px; /* Размер шрифта текста на кнопках */
+    cursor: pointer; /* Курсор в виде указателя при наведении */
+    margin-bottom: 10px; /* Отступ снизу от других кнопок */
+    border-radius: 12px; /* Скругление углов кнопок */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Плавное изменение фона и тени при наведении */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень для кнопок */
+    display: flex; /* Использование flexbox для размещения содержимого кнопок */
+    align-items: center; /* Выравнивание элементов по центру по вертикали */
+    justify-content: center; /* Выравнивание элементов по центру по горизонтали */
+}
+
+/* Цвет кнопок при наведении */
+button:hover {
+    background-color: #d0d0d0; /* Более темный фон при наведении */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Более выраженная тень при наведении */
+}
+
+/* Стили для кнопок при нажатии */
+button:active {
+    transform: scale(0.98); /* Уменьшение кнопки при нажатии */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Уменьшение тени при нажатии */
+}
+
+/* Стили для иконок в кнопках */
+.icon {
+    font-size: 20px; /* Размер шрифта иконок */
+    margin-right: 8px; /* Отступ справа от иконок */
+    color: #007aff; /* Цвет иконок */
+}
+
+/* Цвет иконок при наведении на кнопки */
+button:hover .icon {
+    color: #005c99; /* Более темный цвет иконок при наведении */
+}
+
+/* Цвет иконок при нажатии на кнопки */
+button:active .icon {
+    color: #007aff; /* Цвет иконок при нажатии */
+}
+
+
+
+
+
+
+
+
+
+
+/* Контейнер для карточек */
+.container {
+display: flex; /* Flexbox для горизонтального расположения карточек */
+gap: 20px; /* Расстояние между карточками */
+width: 100%;
+flex-wrap: wrap; /* Разрешить перенос карточек на следующую строку при необходимости */
+padding: 20px; /* Отступы вокруг контейнера */
+box-sizing: border-box; /* Включить отступы в общую ширину/высоту элемента */
+
+}
+
+/* Основной стиль карточки */
+.card {
+background: rgba(255, 255, 255, 0.15); /* Полупрозрачный фон */
+backdrop-filter: blur(12px); /* Эффект размытия для стеклянного эффекта */
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Лёгкая тень для глубины */
+border: 1px solid #ffffff; /* Белая граница */
+display: flex; /* Flexbox для расположения элементов внутри карточки */
+align-items: center; /* Центрирование элементов по вертикали */
+justify-content: space-between; /* Распределение элементов по сторонам */
+padding: 20px; /* Отступы внутри карточки */
+border-radius: 12px; /* Более округлые углы */
+box-sizing: border-box; /* Включить отступы и границы в общую ширину/высоту элемента */
+color: #fefcfc; /* Цвет текста */
+transition: transform 0.3s ease, box-shadow 0.3s ease; /* Плавные переходы */
+width: calc(33.33% - 20px); /* Ширина карточки, учитывая отступы */
+margin-bottom: 20px; /* Отступ снизу для карточек */
+}
+
+
+/* Внутренний фон карточки */
+.card::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+border-radius: 12px;
+background: #2a2e32; /* Внутренний фон карточки */
+z-index: -1; /* Помещаем фон за содержимым */
+}
+
+/* Контент карточки */
+.card-content {
+z-index: 1; /* Содержимое над фоном */
+color: #333; /* Темный текст */
+font-size: 16px;
+font-weight: 500;
+}
+
+/* Иконка карточки (слева) */
+.card .icon {
+font-size: 40px; /* Размер иконки */
+color: #007aff; /* Синий цвет для иконки */
+flex-shrink: 0; /* Иконка не будет сжиматься */
+margin-right: 20px; /* Отступ справа */
+margin-left: 30px; /* Отступ слева */
+}
+
+/* Значение карточки (сумма, справа сверху) */
+.card .value {
+font-size: 32px; /* Размер шрифта для суммы */
+font-weight: 600; /* Полужирный шрифт */
+position: absolute;
+top: 10px; /* Верхний отступ */
+right: 20px; /* Правый отступ */
+color: #06cf1e; /* Цвет суммы */
+}
+
+/* Текст карточки (справа снизу) */
+.card .title {
+font-size: 18px; /* Размер шрифта заголовка */
+font-weight: 600; /* Полужирный шрифт */
+position: absolute;
+bottom: 10px; /* Нижний отступ */
+right: 20px; /* Правый отступ */
+color: #fffefe; /* Цвет заголовка */
+}
+
+/* Статистика карточки */
+.card .stat {
+font-size: 16px; /* Уменьшенный размер шрифта для статистики */
+color: #666; /* Более светлый серый цвет для текста */
+}
+
+/* Стили для карточек с разными цветами */
+.card.soft-blue .icon,
+.card.soft-green .icon,
+.card.peach .icon,
+.card.lavender .icon,
+.card.turquoise .icon,
+.card.pink .icon {
+color: #C0C0C0; /* Белые иконки для всех карточек */
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+.card {
+    width: calc(50% - 20px); /* На маленьких экранах карточки будут занимать 50% ширины контейнера */
+}
+}
+
+@media (max-width: 480px) {
+.card {
+    width: 100%; /* На очень маленьких экранах карточки будут занимать 100% ширины контейнера */
+}
+}
+
+/* Эффект при наведении и нажатии */
+.card:hover {
+transform: translateY(-5px); /* Подъем карточки при наведении */
+box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Более выраженная тень при наведении */
+}
+
+.card:active {
+transform: scale(0.98); /* Уменьшение карточки при нажатии */
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Уменьшение тени */
+}
+
+</style>   
+</head>
+<body onload="checkAuth()">
+    <div class="sidebar">
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="tabs">
+            <button id="SalesReportTab" class="tablink" onclick="openTab(event, 'SalesReport')">
+                <i class="fas fa-chart-line"></i> <span class="tabtext">Отчёт по продажам</span>
+            </button>
+            <button id="CapitalReportTab" class="tablink" onclick="openTab(event, 'CapitalReport')">
+                <i class="fas fa-dollar-sign"></i> <span class="tabtext">Отчёт по капиталу</span>
+            </button>
+            <button id="ObjectReportTab" class="tablink" onclick="openTab(event, 'ObjectReport')">
+                <i class="fa-solid fa-house"></i> <span class="tabtext">Отчёт по объектам</span>
+            </button>
+            <button id="ListobjectsReportTab" class="tablink" onclick="openTab(event, 'ListobjectsReport')">
+                <i class="fa-sharp fa-solid fa-clipboard-list"></i> <span class="tabtext">Список объектов</span>
+            </button>
+            <button id="HistoryManagementTab" class="tablink" onclick="openTab(event, 'HistoryManagement')">
+                <i class="fa-solid fa-clock-rotate-left"></i> <span class="tabtext">История действий</span>
+            </button>
+            <button id="AdminManagementTab" class="tablink" onclick="openTab(event, 'AdminManagement')">
+                <i class="fas fa-user"></i> <span class="tabtext">Администратор</span>
+            </button>
+            <button id="EndthesessiontTab" class="tablink" onclick="logout()">
+                <i class="fa-solid fa-power-off"></i> <span class="tabtext">Завершить сеанс</span>
+            </button>
+        </div>
+        </div>
+   <!-- Контент -->
+<div class="content">
+    
+    <!-- Вкладка "Отчёт по продажам" -->
+    <div class="tabcontent active" id="SalesReport" style="display: block;">
+        <h2>Отчёт по продажам</h2>
+        
+        <!-- Контейнер для карточек -->
+        <div class="container">
+            <!-- Первая карточка -->
+            <div class="card soft-blue">
+                <div class="title">ИНВЕСТИЦИИ</div>
+                <i class="fa-solid fa-hand-holding-dollar icon"></i>
+                <div class="value">$700,000</div>
+            </div>
+            
+            <!-- Вторая карточка -->
+            <div class="card soft-green">
+                <div class="title">ДОХОД</div>
+                <i class="fa-solid fa-chart-line icon"></i>
+                <div class="value">$30,000</div>
+            </div>
+        
+            <!-- Третья карточка -->
+            <div class="card lavender">
+                <div class="title">БАЛАНС</div>
+                <i class="fa-solid fa-money-check-dollar icon"></i>
+                <div class="value">$320,000</div>
+            </div>
+        
+            <!-- Четвертая карточка -->
+            <div class="card peach">
+                <div class="title">ДИВИДЕНДЫ</div>
+                <i class="fa-solid fa-chart-pie icon"></i>
+                <div class="value">$100,000</div>
+            </div>
+        
+            <!-- Пятая карточка -->
+            <div class="card turquoise">
+                <div class="title">ПРИОБРЕТЕНИЯ</div>
+                <i class="fa-solid fa-angles-up icon"></i>
+                <div class="value">$460,000</div>
+            </div>
+        
+            <!-- Шестая карточка -->
+            <div class="card pink">
+                <div class="title">АКТИВЫ</div>
+                <i class="fa-solid fa-landmark icon"></i>
+                <div class="value">$345,000</div>
+            </div>
+        </div> <!-- Закрытие контейнера для карточек -->
+        
+        <!-- Блок с таблицами -->
+        <div>
+            <!-- Таблица с двумя колонками -->
+            <table>
+                <tr>
+                    <!-- Первая колонка заголовков и данных -->
+                    <td>
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">Показатели</th>
+                                    <th colspan="2">Нарастающим итогом</th>
+                                </tr>
+                                <tr>
+                                    <th>Кол-во</th>
+                                    <th>Сумма</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Первая строка: Начисленная сумма к оплате -->
+                                <tr>
+                                    <td class="text-left">Начисленная сумма к оплате</td>
+                                    <td>
+                                        <span class="number-right" id="report-objects-count">10</span>
+                                    </td>
+                                    <td>
+                                        <span class="number-right" id="report-objects-value">$200,000</span>
+                                    </td>
+                                </tr>
+                            
+                                <!-- Вторая строка: Фактически оплаченная сумма -->
+                                <tr>
+                                    <td class="text-left">Фактически оплаченная сумма</td>
+                                    <td>
+                                        <span class="number-right" id="report-paid-sum-count">10</span>
+                                    </td>
+                                    <td>
+                                        <span class="number-right" id="report-paid-sum-value">$200,000</span>
+                                    </td>
+                                </tr>
+                            
+                                <!-- Третья строка: Остаётся к оплате -->
+                                <tr>
+                                    <td class="text-left">Остаётся к оплате</td>
+                                    <td>
+                                        <span class="number-right" id="report-remaining-sum-count">10</span>
+                                    </td>
+                                    <td>
+                                        <span class="number-right" id="report-remaining-sum-value">$200,000</span>
+                                    </td>
+                                </tr>
+                            
+                                <!-- Четвёртая строка: Просроченные платежи -->
+                                <tr>
+                                    <td class="text-left">Просроченные платежи</td>
+                                    <td>
+                                        <span class="number-right" id="report-overdue-payments-count">10</span>
+                                    </td>
+                                    <td>
+                                        <span class="number-right" id="report-overdue-payments-value">$5,000</span>
+                                    </td>
+                                </tr>
+                            
+                                <!-- Пятая строка: Возвратность (%) -->
+                                <tr>
+                                    <td class="text-left">Возвратность (%)</td>
+                                    <td>
+                                        <span class="number-right" id="report-interest">*</span>
+                                    </td>
+                                    <td>
+                                        <span class="number-right" id="report-interest-second">15%</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    
+                    <!-- Вторая колонка заголовков и данных -->
+                    <td>
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Отчётный период</th>
+                                </tr>
+                                <tr>
+                                    <th>Кол-во</th>
+                                    <th>Сумма</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>$110,000</td>
+                                    <td>$230,000</td>
+                                </tr>
+                                <tr>
+                                    <td>$90,000</td>
+                                    <td>$180,000</td>
+                                </tr>
+                                <tr>
+                                    <td>$90,000</td>
+                                    <td>$180,000</td>
+                                </tr>
+                                <tr>
+                                    <td>$20,000</td>
+                                    <td>$50,000</td>
+                                </tr>
+                                <tr>
+                                    <td>*</td>
+                                    <td>15%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div> <!-- Закрытие блока с таблицами -->
+        
+    </div> <!-- Закрытие вкладки "Отчёт по продажам" -->
+    
+    <!-- Вкладка "Отчёт по капиталу" -->
+    <div class="tabcontent" id="CapitalReport">
+        <h2>Отчёт по капиталу</h2>
+        <button onclick="addRow()">+ добавить</button>
+        <table id="cashFlowTable">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Наименование операции</th>
+                    <th>Сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Вложенные инвестиции</td>
+                    <td id="cashFlow-investments">$700,000</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Приобретённые объекты</td>
+                    <td id="cashFlow-acquired-objects">$460,000</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Реализованные объекты</td>
+                    <td id="cashFlow-sold-objects">$190,000</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Из них доход</td>
+                    <td id="cashFlow-income">$30,000</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Другие расходы</td>
+                    <td id="cashFlow-other-expenses">$10,000</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Полученные дивиденды</td>
+                    <td id="cashFlow-dividends">$100,000</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Денежный остаток</td>
+                    <td id="cashFlow-cash-balance"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div> <!-- Закрытие вкладки "Отчёт по капиталу" -->
+    
+    <!-- Вкладка "Отчёт по объектам" -->
+    <div class="tabcontent" id="ObjectReport"> 
+        <h2>Отчёт по объектам</h2>
+    </div> <!-- Закрытие вкладки "Отчёт по объектам" -->
+    
+    <!-- Вкладка "Список объектов" -->
+    <div class="tabcontent" id="ListobjectsReport"> 
+        <h2>Список объектов</h2>
+    </div> <!-- Закрытие вкладки "Список объектов" -->
+    
+    <!-- Вкладка "История действий" -->
+    <div class="tabcontent" id="HistoryManagement">
+        <h2>История действий</h2>
+    </div> <!-- Закрытие вкладки "История действий" -->
+    
+    <!-- Вкладка "Администрирование" -->
+    <div class="tabcontent" id="AdminManagement">
+        <h2>Администрирование</h2>
+    </div> <!-- Закрытие вкладки "Администрирование" -->
+    
+</div> <!-- Закрытие контейнера "content" -->
+
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+<!-- Подключение внешнего JavaScript файла -->
+<script src="script.js"></script>
+<script>
+    function openTab(evt, tabName) {
+      let i, tabcontent, tablinks;
+  
+      // Скрываем все элементы с классом "tabcontent"
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "none";
+      }
+  
+      // Убираем класс "active" со всех кнопок
+      tablinks = document.getElementsByClassName("tablink");
+      for (i = 0; i < tablinks.length; i++) {
+          tablinks[i].classList.remove("active");
+      }
+  
+      // Показываем выбранную вкладку
+      const activeTab = document.getElementById(tabName);
+      if (activeTab) {
+          activeTab.style.display = "block";
+      } else {
+          console.error('Элемент с id "' + tabName + '" не найден.');
+      }
+  
+      // Добавляем класс "active" к нажатой кнопке
+      evt.currentTarget.classList.add("active");
+  }
+  
+  // Функция для проверки авторизации пользователя
+  function checkAuth() {
+      fetch('/user-role') // Запрос на сервер для получения роли пользователя
+          .then(response => response.json()) // Преобразуем ответ в JSON
+          .then(data => {
+              const role = data.role; // Получаем роль пользователя из данных
+  
+              if (!role) { // Если роль не определена, перенаправляем на страницу входа
+                  window.location.href = 'login.html';
+                  return;
+              }
+  
+              // Проверяем, залогинен ли пользователь
+              const isLoggedIn = localStorage.getItem('loggedIn'); // Проверяем флаг в локальном хранилище
+              if (!isLoggedIn) {
+                  window.location.href = 'login.html'; // Если пользователь не залогинен, перенаправляем на страницу входа
+              }
+          })
+          .catch(() => {
+              window.location.href = 'login.html'; // При ошибке запроса также перенаправляем на страницу входа
+          });
+  }
+  
+  // Функция для выхода из системы (logout)
+  function logout() {
+      fetch('/logout', {
+          method: 'POST', // Используем метод POST для запроса
+          credentials: 'include' // Обеспечиваем отправку куки вместе с запросом
+      })
+      .then(response => {
+          if (response.ok) { // Если запрос успешен, перенаправляем на страницу входа
+              window.location.href = '/login.html';
+          } else {
+              console.error('Ошибка при завершении сеанса:', response.statusText); // Выводим ошибку в консоль при проблемах
+          }
+      })
+      .catch(error => {
+          console.error('Ошибка при завершении сеанса:', error); // Ловим и выводим ошибку в консоль
+      });
+  }
+  </script>
+  
+</body>
+</html>
