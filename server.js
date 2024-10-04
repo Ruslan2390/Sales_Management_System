@@ -70,8 +70,6 @@ const checkAuth = (req, res, next) => {
   }
 };
 
-
-
 // Основной маршрут, защищённый проверкой авторизации
 app.get('/', checkAuth, (req, res) => {
   res.redirect('/index.html'); // Перенаправляем на главную страницу
@@ -115,7 +113,7 @@ app.post('/login', (req, res) => {
         return res.status(500).send('Ошибка проверки пароля.');
       }
       if (result) {
-        res.cookie('role', user.role, { httpOnly: true, secure: false }); // Use secure: true in production
+        res.cookie('role', user.role, { httpOnly: true, secure: true }); // Use secure: true in production
         res.redirect('/');
       } else {
         res.status(401).send('Неверное имя пользователя или пароль.');
@@ -126,12 +124,20 @@ app.post('/login', (req, res) => {
   }
 });
 
+
+
+
+
 // Маршрут для выхода из системы
 app.post('/logout', (req, res) => {
   console.log('Handling /logout POST request');
   res.clearCookie('role'); // Удаляем куку с ролью
   res.redirect('/login'); // Перенаправляем на страницу логина
 });
+
+
+
+
 
 // Настройка сервера
 app.use(express.static(path.join(__dirname, 'public')));
