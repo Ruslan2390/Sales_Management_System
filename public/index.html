@@ -1439,6 +1439,9 @@ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Уменьшение тени */
   
 
 
+  
+
+
 
   // Функция для скрытия и отображения боковой панели (sidebar)
   function toggleSidebar() {
@@ -1451,54 +1454,11 @@ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Уменьшение тени */
 
 
 
- 
-// Функция для проверки авторизации пользователя
-function checkAuth() {
-    // Сначала проверим, залогинен ли пользователь
-    const isLoggedIn = localStorage.getItem('loggedIn');
-    if (!isLoggedIn) {
-        window.location.href = 'login.html'; // Если пользователь не залогинен, перенаправляем на страницу входа
-        return; // Останавливаем выполнение функции
-    }
 
-    // Если пользователь залогинен, делаем запрос для получения его роли
-    fetch('/user-role') // Запрос на сервер для получения роли пользователя
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json(); // Преобразуем ответ в JSON
-        })
-        .then(data => {
-            const role = data.role;
+  
 
-            // Если роль не определена, перенаправляем на страницу входа
-            if (!role) {
-                window.location.href = 'login.html';
-                return;
-            }
 
-            // Скрываем/показываем вкладки в зависимости от роли пользователя
-            if (role === 'admin') {
-                document.getElementById('HistoryManagementTab').style.display = 'block'; // Показываем вкладку управления историей для admin
-                document.getElementById('AdminManagementTab').style.display = 'block'; // Показываем вкладку управления администрацией
-            }
-            if (role === 'user') {
-                document.getElementById('CapitalReportTab').style.display = 'block'; // Показываем вкладку отчета о капитале
-                document.getElementById('ObjectReportTab').style.display = 'block'; // Показываем вкладку отчета об объектах
-                document.getElementById('ListobjectsReportTab').style.display = 'block'; // Показываем вкладку отчета о списке объектов
-            }
-        })
-        .catch((error) => {
-            console.error('Ошибка:', error); 
-            window.location.href = 'login.html'; // В случае ошибки, перенаправляем на страницу входа
-        });
-}
 
-// Ждем, пока DOM полностью загрузится
-document.addEventListener('DOMContentLoaded', function() {
-    checkAuth();
-});
 
 
 
