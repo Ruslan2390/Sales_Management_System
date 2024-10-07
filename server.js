@@ -7,21 +7,74 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const app = express();
 
-// Настройка подключения к MySQL
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
-});
 
-db.connect(err => {
-  if (err) {
-    console.error('Ошибка подключения к базе данных:', err);
-    return;
-  }
-  console.log('Подключение к базе данных успешно!');
-});
+
+const mysql = require('mysql2');
+const connection = mysql.createConnection(process.env.JAWSDB_URL || {
+  host: 'localhost',
+  user: 'admin',
+  password: 'three',
+  database: 'sales_management_system'});
+
+  connection.connect((err) => {
+    if (err) {
+      console.error('Ошибка подключения: ' + err.stack);
+      return;
+    }
+    console.log('Подключено как id ' + connection.threadId);
+  
+    // Добавляем запрос для создания таблицы после успешного подключения
+    connection.query(`
+      CREATE TABLE IF NOT EXISTS objects (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        object_name VARCHAR(255) NOT NULL,
+        object_type VARCHAR(100),
+        object_quantity INT,
+        purchase_date DATE,
+        purchase_amount DECIMAL(15, 2),
+        buyer_fullname VARCHAR(255),
+        buyer_phone VARCHAR(15),
+        buyer_passport_id VARCHAR(50),
+        buyer_address TEXT,
+        registered_to_owner BOOLEAN,
+        guarantor_fullname VARCHAR(255),
+        guarantor_phone VARCHAR(15),
+        guarantor_passport_id VARCHAR(50),
+        guarantor_address TEXT,
+        contract_number VARCHAR(100),
+        contract_date DATE,
+        term_months INT,
+        months_elapsed INT,
+        completion_date DATE,
+        sale_price DECIMAL(15, 2),
+        discount DECIMAL(10, 2),
+        profit_amount DECIMAL(15, 2),
+        profit_percent DECIMAL(5, 2),
+        total_payment_due DECIMAL(15, 2),
+        initial_payment DECIMAL(15, 2),
+        monthly_payment DECIMAL(15, 2),
+        payment_term DATE,
+        overdue_payments INT,
+        overdue_report_period INT,
+        total_paid DECIMAL(15, 2),
+        paid_report_period DECIMAL(15, 2),
+        total_remaining DECIMAL(15, 2),
+        remaining_report_period DECIMAL(15, 2),
+        total_overdue DECIMAL(15, 2),
+        overdue_report_period_sum DECIMAL(15, 2),
+        status VARCHAR(50)
+      );
+    `, (err, results) => {
+      if (err) {
+        console.error('Ошибка создания таблицы: ', err);
+        return;
+      }
+      console.log('Таблица успешно создана (или уже существует)');
+    });
+  });
+
+
+
 
 // Логирование запросов
 app.use((req, res, next) => {
